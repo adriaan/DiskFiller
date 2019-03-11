@@ -26,6 +26,7 @@ final class FileHandler {
         }
         fileHandlingQueue.async {
             do {
+                let imageData = try Data(contentsOf: URL(fileURLWithPath: sourcePath))
                 let filePaths = try self.fileManager.contentsOfDirectory(atPath: documentsPath)
                 var i = filePaths.count
                 self.numberOfFilesStored = i
@@ -35,7 +36,7 @@ final class FileHandler {
                     let filePath = documentsPath.appending(fileName)
                     if !self.fileManager.fileExists(atPath: filePath) {
                         do {
-                            try self.fileManager.copyItem(atPath: sourcePath, toPath: filePath)
+                            try imageData.write(to: URL(fileURLWithPath: filePath))
                             self.delegate?.fileHandlerDidAddFile(fileHander: self)
                             self.incrementFilesStored()
                         } catch {
